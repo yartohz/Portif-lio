@@ -71,25 +71,59 @@
     <!-- MOUSE (ANIMAÇÃO SOBRE MIM) -->
     <img id="fake-mouse" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='30' viewBox='0 0 20 30'%3E%3Cpolygon points='1,1 1,21 6,16 10,25 14,23 9.5,14 16,14' fill='white' stroke='black' stroke-width='1.5' /%3E%3C/svg%3E" class="d-none" alt="mouse">
 
-    <!-- JANELA de Sobre Mim -->
-    <div id="sobre-window" class="xp-window d-none">
-        <div class="xp-titlebar d-flex justify-content-between align-items-center">
-            <span>Sobre_Mim.exe</span>
-            <button id="btn-fechar-sobre" class="xp-close-btn">X</button>
+    <!-- 4. JANELA WINDOWS XP (SOBRE MIM) -->
+<div id="sobre-window" class="xp-window d-none">
+    <div class="xp-titlebar d-flex justify-content-between align-items-center">
+        <span>Sobre_Mim.exe</span>
+        <button id="btn-fechar-sobre" class="xp-close-btn">X</button>
+    </div>
+    
+    <div id="xp-window-body" class="xp-body-content row m-0">
+        
+        <!-- Coluna Esquerda: Mini Menu com Scrollspy -->
+        <div class="col-md-4 d-flex flex-column align-items-center justify-content-center p-3" style="background-color: #3b5998; color: white;">
+            <h4 class="text-center font-monospace text-shadow-retro mb-4">DESENVOLVEDOR<br>FULLSTACK</h4>
+            
+            <!-- Mini navegação conectada ao Scrollspy -->
+            <nav id="menu-sobre-spy" class="nav nav-pills flex-column w-100 font-monospace small">
+                <a class="nav-link text-white active" href="#sec-apresentacao">1. Apresentação</a>
+                <a class="nav-link text-white" href="#sec-experiencia">2. Exp. Eletromecânica</a>
+                <a class="nav-link text-white" href="#sec-inspiracao">3. Inspiração & Visão</a>
+                <a class="nav-link text-white" href="#sec-ads">4. Formação ADS</a>
+            </nav>
         </div>
-        <div id="xp-window-body" class="xp-body-content row m-0">
-            <div class="col-md-5 d-flex align-items-center justify-content-center" style="background-color: #3b5998; color: white;">
-                <h2 class="text-center font-monospace text-shadow-retro">DESENVOLVEDOR<br>FULLSTACK</h2>
-            </div>
-            <div class="col-md-7 history-scroll p-4 text-dark" style="background-color: #ffffff;">
-                <h3 class="mb-3 border-bottom border-dark pb-2">Minha História</h3>
-                <p>Eu sou o Yann, Sou apaixonado por criação e desenvolvimento desde pequeno, não apenas do tipo de tecnologico mas também do tipo de design e artistico.</p>
-                <p>Tenho experiência no ramo de engenharia eletromecanica pelo curso técnico que fiz no Instituto de Ensino Senai, e atualmente desejo ter o mesmo tipo de experiência em desenvolvimento web de ponta a ponta, conectando interfaces ricas com sistemas eficientes no back-end.</p>
-                <p>Adoro explorar todos os tipos de conceitos visuais de retrô a contemporâneos, eu diria que esse amor vem muitas vezes dos meus pais com meu pai que me ensinou a apreciar a beleza da tecnologia e da arte, e minha mãe que sempre me inspirou e me motivou a seguir os meus sonhos e sempre seguir em frente mesmo com tudo dando errado.</p>
-                <p>Eu Cursei durante 2 anos em conjunto com ensino medio o curso de Eletromecanica pelo SENAI de Ribeirão Preto após me formar eu decidi não seguir na área, e agora curso ADS-Analise e Desenvolvimento de Sistemas de Ribeirão Preto vejo como uma oportunidade de seguir uma área que pelo que eu vejo faz mais sentido comigo</p>
-            </div>
+
+        <!-- Coluna Direita: Conteúdo com Scrollspy Ativo -->
+        <div class="col-md-8 history-scroll p-4 text-dark position-relative" 
+             style="background-color: #ffffff; height: 350px; overflow-y: auto;"
+             data-bs-spy="scroll" 
+             data-bs-target="#menu-sobre-spy" 
+             data-bs-smooth-scroll="true" 
+             tabindex="0">
+
+            <section id="sec-apresentacao" class="mb-4">
+                <h5 class="fw-bold border-bottom pb-1">Apresentação</h5>
+                <p>Eu sou o Yann, apaixonado por criação e desenvolvimento desde pequeno, não apenas do tipo tecnológico, mas também no âmbito do design e artístico.</p>
+            </section>
+
+            <section id="sec-experiencia" class="mb-4">
+                <h5 class="fw-bold border-bottom pb-1">Experiência Eletromecânica</h5>
+                <p>Tenho experiência no ramo de engenharia eletromecânica pelo curso técnico que fiz no Instituto SENAI. Atualmente, busco essa mesma excelência no desenvolvimento web de ponta a ponta, conectando interfaces ricas com sistemas eficientes no back-end.</p>
+            </section>
+
+            <section id="sec-inspiracao" class="mb-4">
+                <h5 class="fw-bold border-bottom pb-1">Inspiração e Visão</h5>
+                <p>Adoro explorar conceitos visuais do retrô ao contemporâneo. Essa paixão vem dos meus pais: meu pai me ensinou a apreciar a tecnologia e a arte, e minha mãe sempre me inspirou a seguir meus sonhos e persistir.</p>
+            </section>
+
+            <section id="sec-ads" class="mb-4">
+                <h5 class="fw-bold border-bottom pb-1">Análise e Desenvolvimento de Sistemas</h5>
+                <p>Cursei Eletromecânica no SENAI de Ribeirão Preto durante o ensino médio. Após me formar, decidi migrar para a tecnologia e hoje curso ADS, uma área com a qual me identifico completamente.</p>
+            </section>
+
         </div>
     </div>
+</div>
 
     <!-- 5. CÂMERA E FLASH (ANIMAÇÃO DE PROJETOS) -->
     <div id="camera-container" class="camera-hanging-container">

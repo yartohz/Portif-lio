@@ -7,8 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const projetosWindow = document.getElementById('projetos-window');
     const overlayCert = document.getElementById('overlay-certificados');
     const polaroidCards = document.querySelectorAll('.polaroid-card');
+    const tvVideo = document.getElementById('tv-video');
+    const cameraContainer = document.getElementById('camera-container');
+    const flashOverlay = document.getElementById('flash-overlay');
 
     let fullMatrixTimer = null;
+    let tvAnimationId = null; // Controle do loop da TV
 
     // --- FUNÇÃO CENTRALIZADA PARA FECHAR OVERLAYS ---
     function closeAllOverlays() {
@@ -19,6 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
             polaroidCards.forEach(card => card.classList.remove('show'));
         }
         if (overlayCert) overlayCert.classList.add('d-none');
+        
+        // Pausa e reseta o vídeo da TV ao fechar overlays
+        if (tvVideo) {
+            tvVideo.pause();
+            tvVideo.currentTime = 0;
+        }
+
+        // Reseta estado da câmera e flash
+        if (cameraContainer) cameraContainer.style.top = '-120vh';
+        if (flashOverlay) flashOverlay.style.opacity = '0';
+
+        // Cancela o loop de renderização da TV
+        if (tvAnimationId) {
+            cancelAnimationFrame(tvAnimationId);
+            tvAnimationId = null;
+        }
+
+        // Para a animação da Matrix em fullscreen
         if (fullMatrixTimer) {
             clearInterval(fullMatrixTimer);
             fullMatrixTimer = null;
@@ -131,6 +153,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnFecharCert) btnFecharCert.addEventListener('click', closeAllOverlays);
 
+    // --- 2.1. VISUALIZADOR DE PDF EM MODAL (CARDS DE CERTIFICADOS) ---
+    const pdfViewerModalEl = document.getElementById('pdfViewerModal');
+    if (pdfViewerModalEl) {
+        const pdfViewerModal = (typeof bootstrap !== 'undefined' && bootstrap.Modal) ? bootstrap.Modal.getOrCreateInstance(pdfViewerModalEl) : null;
+        const pdfFrame = document.getElementById('pdfFrame');
+        const pdfModalLabel = document.getElementById('pdfViewerModalLabel');
+        const matrixCards = document.querySelectorAll('.matrix-card');
+
+        matrixCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const pdfSrc = card.getAttribute('data-pdf');
+                const pdfTitle = card.getAttribute('data-title');
+
+                if (pdfSrc && pdfFrame) {
+                    pdfFrame.src = pdfSrc;
+                    if (pdfModalLabel) {
+                        pdfModalLabel.textContent = `DOCUMENTO: ${pdfTitle ? pdfTitle.toUpperCase() : 'CERTIFICADO'}`;
+                    }
+                    if (pdfViewerModal) {
+                        pdfViewerModal.show();
+                    }
+                }
+            });
+        });
+
+        pdfViewerModalEl.addEventListener('hidden.bs.modal', () => {
+            if (pdfFrame) pdfFrame.src = '';
+        });
+    }
+
     // --- 3. JANELA WINDOWS XP (SOBRE MIM) ---
     const btnSobre = document.getElementById('btn-sobre');
     const conteudoSobre = document.getElementById('xp-window-body');
@@ -175,8 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnFecharSobre) btnFecharSobre.addEventListener('click', closeAllOverlays);
 
-    // --- 4. CONTATOS (TV CRT + CHROMA KEY DE ALTA PRECISÃO NO CANVAS) ---
-    const tvVideo = document.getElementById('tv-video');
+    // --- 4. CONTATOS (TV CRT + CHROMA KEY CORRIGIDO) ---
     const tvCanvas = document.getElementById('tv-canvas');
     const iconeAudio = document.getElementById('hover-audio-icon');
     const somTelefone = document.getElementById('phone-ring-sound');
@@ -187,44 +238,50 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = tvCanvas.getContext('2d', { willReadFrequently: true });
 
         function processTVFrame() {
-            if (!tvVideo.paused && !tvVideo.ended) {
-                if (tvCanvas.width !== tvVideo.videoWidth && tvVideo.videoWidth > 0) {
-                    tvCanvas.width = tvVideo.videoWidth;
-                    tvCanvas.height = tvVideo.videoHeight;
-                }
-
-                if (tvCanvas.width > 0) {
-                    ctx.drawImage(tvVideo, 0, 0, tvCanvas.width, tvCanvas.height);
-                    const frame = ctx.getImageData(0, 0, tvCanvas.width, tvCanvas.height);
-                    const data = frame.data;
-                    const len = data.length;
-
-                    for (let i = 0; i < len; i += 4) {
-                        const r = data[i];
-                        const g = data[i + 1];
-                        const b = data[i + 2];
-
-                        const maxC = Math.max(r, g, b);
-                        const minC = Math.min(r, g, b);
-                        const diff = maxC - minC;
-
-                        // O fundo do vídeo é branco neutro (> 238 e pouca variação de cor)
-                        if (minC > 238 && diff < 12) {
-                            data[i + 3] = 0; // Transparência total
-                        } else if (minC > 215 && diff < 15) {
-                            // Suavização progressiva para evitar rebordos denteados
-                            const alphaRatio = (238 - minC) / (238 - 215);
-                            data[i + 3] = Math.floor(alphaRatio * 255);
-                        }
-                    }
-                    ctx.putImageData(frame, 0, 0);
-                }
+            // Se o vídeo parou ou acabou, encerra a renderização
+            if (tvVideo.paused || tvVideo.ended) {
+                tvAnimationId = null;
+                return;
             }
-            requestAnimationFrame(processTVFrame);
+
+            if (tvCanvas.width !== tvVideo.videoWidth && tvVideo.videoWidth > 0) {
+                tvCanvas.width = tvVideo.videoWidth;
+                tvCanvas.height = tvVideo.videoHeight;
+            }
+
+            if (tvCanvas.width > 0) {
+                ctx.drawImage(tvVideo, 0, 0, tvCanvas.width, tvCanvas.height);
+                const frame = ctx.getImageData(0, 0, tvCanvas.width, tvCanvas.height);
+                const data = frame.data;
+                const len = data.length;
+
+                for (let i = 0; i < len; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+
+                    const maxC = Math.max(r, g, b);
+                    const minC = Math.min(r, g, b);
+                    const diff = maxC - minC;
+
+                    if (minC > 238 && diff < 12) {
+                        data[i + 3] = 0;
+                    } else if (minC > 215 && diff < 15) {
+                        const alphaRatio = (238 - minC) / (238 - 215);
+                        data[i + 3] = Math.floor(alphaRatio * 255);
+                    }
+                }
+                ctx.putImageData(frame, 0, 0);
+            }
+
+            // Continua o loop somente enquanto o vídeo estiver reproduzindo
+            tvAnimationId = requestAnimationFrame(processTVFrame);
         }
 
         tvVideo.addEventListener('play', () => {
-            requestAnimationFrame(processTVFrame);
+            if (!tvAnimationId) {
+                tvAnimationId = requestAnimationFrame(processTVFrame);
+            }
         });
     }
 
@@ -241,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             telaContatos.classList.remove('d-none');
 
-            // Reinicia a animação Persona 3
             p3Menu.classList.remove('p3-menu');
             void p3Menu.offsetWidth;
             p3Menu.classList.add('p3-menu');
@@ -252,29 +308,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. GALERIA DE PROJETOS (CÂMERA, FLASH & POLAROID) ---
+    // --- 5. GALERIA DE PROJETOS (CÂMERA SUSPENSA, FLASH & POLAROID) ---
     const btnProjetos = document.getElementById('btn-projetos');
-    const cameraContainer = document.getElementById('camera-container');
-    const flashOverlay = document.getElementById('flash-overlay');
     const btnFecharProjetos = document.getElementById('btn-fechar-projetos');
 
     if (btnProjetos && cameraContainer && flashOverlay && projetosWindow) {
         btnProjetos.addEventListener('click', (e) => {
             e.preventDefault();
+
+            // 1. A câmera desce pendurada pelas teias
             cameraContainer.style.top = '0px';
 
-            setTimeout(() => { flashOverlay.style.opacity = '1'; }, 700);
+            // 2. Dispara o flash (700ms)
+            setTimeout(() => { 
+                flashOverlay.style.opacity = '1'; 
+            }, 700);
 
+            // 3. Recolhe a câmera, oculta flash e mostra a galeria (900ms)
             setTimeout(() => {
-                cameraContainer.style.top = '-300px';
+                cameraContainer.style.top = '-120vh';
                 projetosWindow.classList.remove('d-none');
                 flashOverlay.style.opacity = '0';
 
                 polaroidCards.forEach((card, index) => {
                     card.classList.remove('show');
-                    setTimeout(() => { card.classList.add('show'); }, index * 250);
+                    setTimeout(() => { 
+                        card.classList.add('show'); 
+                    }, index * 250);
                 });
-            }, 850);
+            }, 900);
         });
     }
 

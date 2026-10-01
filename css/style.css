@@ -1,4 +1,9 @@
 /* ==========================================================================
+   0. IMPORTAÇÃO DE FONTES EXTERNAS
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/* ==========================================================================
    1. ESTRUTURA GLOBAL E DESKTOP
    ========================================================================== */
 body, html {
@@ -10,6 +15,7 @@ body, html {
     background-color: #000;
 }
 
+/* Utilitário nativo mantido para garantia */
 .d-none {
     display: none !important;
 }
@@ -18,7 +24,6 @@ body, html {
     position: relative;
     width: 100vw;
     height: calc(100vh - 40px);
-    background-image: url('../assets/sua-foto-de-fundo.jpg');
     background-size: cover;
     background-position: center;
     background-color: #111;
@@ -230,49 +235,39 @@ body, html {
 .history-scroll { height: 100%; overflow-y: auto; font-family: 'Tahoma', sans-serif; }
 
 /* ==========================================================================
-   4. CÂMERA, FLASH E GALERIA POLAROID (PROJETOS)
+   4. CÂMERA RETRÔ SUSPENSA (EFEITO TEIA DE ARANHA), FLASH E GALERIA POLAROID
    ========================================================================== */
-.camera-drop {
+.camera-hanging-container {
     position: fixed;
-    top: -300px; left: 50%;
+    top: -120vh; /* Escondida acima da tela */
+    left: 50%;
     transform: translateX(-50%);
-    z-index: 6000;
-    transition: top 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 5000;
     pointer-events: none;
+    transition: top 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.camera-string { width: 2px; height: 150px; background: #fff; margin: 0 auto; }
-.camera-body {
-    width: 120px; height: 80px;
-    background: #333;
-    border: 3px solid #ccc;
-    border-radius: 10px;
-    position: relative;
-}
-.camera-lens {
-    width: 45px; height: 45px;
-    border-radius: 50%;
-    background: #111;
-    border: 4px solid #888;
-    position: absolute;
-    top: 15px; left: 35px;
-}
-.camera-flash-unit {
-    width: 20px; height: 12px;
-    background: #fff;
-    border: 1px solid #000;
-    position: absolute;
-    top: 8px; right: 10px;
+#vintage-camera-img {
+    width: 350px;       /* Ajuste para cerca de 50% do tamanho anterior (ex: se era ~700px) */
+    max-width: 45vw;    /* Garante que não fique gigante em telas menores */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0px 15px 10px rgba(0, 0, 0, 0.7)); /* Sombra para dar profundidade */
 }
 
+/* Flash fotográfico fullscreen */
 #flash-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background-color: #fff;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
     opacity: 0;
+    z-index: 10000;
     pointer-events: none;
-    z-index: 7000;
-    transition: opacity 0.15s ease-out;
+    transition: opacity 0.12s ease-in-out;
 }
 
 .projetos-overlay {
@@ -400,7 +395,6 @@ body, html {
     filter: drop-shadow(0 0 10px rgba(0, 168, 255, 0.35));
 }
 
-/* Linhas elétricas SVG conectando TV aos botões */
 .tv-static-lines {
     position: absolute;
     top: 0;
@@ -446,7 +440,7 @@ body, html {
     transform: translateX(-150%) scale(0.2);
     opacity: 0;
     animation: emergeFromTV 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    animation-delay: calc(var(--i) * 0.12s);
+    animation-delay: calc(var(--i, 1) * 0.12s); /* Adicionado fallback default 1 */
 }
 
 .p3-menu a {
@@ -483,18 +477,19 @@ body, html {
 }
 
 /* ==========================================================================
-   6. MATRIX FULLSCREEN & CERTIFICADOS
+   6. MATRIX FULLSCREEN, CERTIFICADOS & MODAL PDF (CORRIGIDO)
    ========================================================================== */
 .matrix-fullscreen {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
     background-color: rgba(0, 0, 0, 0.95);
     z-index: 5000;
-    cursor: pointer;
 }
 
 #matrix-full {
-    position: absolute; top: 0; left: 0;
+    position: absolute; 
+    top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: 1;
 }
@@ -502,33 +497,67 @@ body, html {
 .certificados-content {
     position: relative;
     z-index: 2;
-    width: 100%; height: 100%;
+    width: 100%; 
+    min-height: 100vh;
     overflow-y: auto;
-    cursor: default;
+    box-sizing: border-box;
 }
 
-.cert-box {
-    width: 280px; 
-    height: 180px;
-    border: 2px solid #0f0;
-    background: rgba(0, 20, 0, 0.85);
-    color: #0f0;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    font-size: 1.5rem;
-    box-shadow: 0 0 10px #0f0;
-    text-decoration: none; /* Remove a linha do link */
+.matrix-title {
+    color: #0f0; 
+    text-shadow: 0 0 10px #0f0;
+    font-size: 2.5rem;
+}
+
+.max-width-matrix {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.matrix-card {
+    background-color: rgba(0, 15, 0, 0.88) !important;
+    border: 2px solid #0f0 !important;
+    color: #0f0 !important;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    padding: 15px;
 }
 
-/* Efeito ao passar o mouse por cima */
-.cert-box:hover {
-    background: #0f0;
-    color: #000;
+.matrix-card:hover {
+    transform: translateY(-6px);
     box-shadow: 0 0 20px #0f0;
-    transform: translateY(-5px);
+    background-color: rgba(0, 30, 0, 0.95) !important;
+}
+
+.matrix-card .card-icon {
+    font-size: 2.2rem;
+}
+
+.matrix-card .btn-outline-success {
+    border-color: #0f0;
+    color: #0f0;
+    transition: all 0.2s ease;
+}
+
+.matrix-card:hover .btn-outline-success {
+    background-color: #0f0;
+    color: #000;
+}
+
+/* Força o Modal do PDF e o fundo escuro a irem para a frente do overlay Matrix */
+#pdfViewerModal {
+    z-index: 6000 !important;
+}
+
+.modal-backdrop {
+    z-index: 5999 !important;
+}
+
+#pdfViewerModal .modal-content {
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+}
+
+#pdfViewerModal iframe {
+    display: block;
+    background-color: #fff;
 }

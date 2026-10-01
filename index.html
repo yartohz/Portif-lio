@@ -17,7 +17,6 @@
     <!-- 1. ÁREA DE TRABALHO (DESKTOP) -->
     <div class="desktop-background" style="background-image: url('assets/eu_do_portifolio.jpg');">
 
-
         <!-- Menu de Navegação Superior -->
         <nav class="d-flex justify-content-center align-items-center pt-4 gap-3 position-relative" style="z-index: 100;">
             <a href="#" id="btn-home" class="retro-btn active">home</a>
@@ -42,14 +41,14 @@
         </nav>
 
         <!-- Janela Flutuante Estilo Windows 95/98 -->
-        <div class="retro-window position-absolute" style="top: 25%; left: 10%; width: 320px;">
+        <div id="retro-alert-window" class="retro-window position-absolute" style="top: 25%; left: 10%; width: 320px;">
             <div class="window-header d-flex justify-content-between align-items-center">
                 <span>⚠️ DESENVOLVEDOR FULLSTACK</span>
-                <button class="close-btn">X</button>
+                <button class="close-btn" onclick="document.getElementById('retro-alert-window').style.display='none'">X</button>
             </div>
             <div class="window-body text-center p-3">
                 <p class="mb-3 fw-bold">🔫 YANN FREIRE SOARES DE ARAUJO</p>
-                <button class="action-btn">CLIQUE SOBRE PARA MAIS</button>
+                <button class="action-btn" onclick="document.getElementById('btn-sobre').click()">CLIQUE SOBRE PARA MAIS</button>
             </div>
         </div>
 
@@ -94,13 +93,10 @@
     </div>
 
     <!-- 5. CÂMERA E FLASH (ANIMAÇÃO DE PROJETOS) -->
-    <div id="camera-container" class="camera-drop">
-        <div class="camera-string"></div>
-        <div class="camera-body">
-            <div class="camera-lens"></div>
-            <div class="camera-flash-unit"></div>
-        </div>
+    <div id="camera-container" class="camera-hanging-container">
+        <img src="assets/camera.png" id="vintage-camera-img" alt="Câmera Fotográfica Retrô">
     </div>
+
     <div id="flash-overlay"></div>
 
     <!-- 6. GALERIA DE PROJETOS (POLAROID) -->
@@ -112,7 +108,7 @@
         <div class="polaroid-grid">
             <div class="polaroid-card">
                 <div class="polaroid-img" style="background-image: url('assets/foodpay_projeto.png');"></div>
-                <a href="https://github.com/PauloRicardo00/Food-Pay">Sistema FoodPay</a>
+                <a href="https://github.com/PauloRicardo00/Food-Pay" target="_blank" rel="noopener noreferrer">Sistema FoodPay</a>
             </div>
         </div>
     </div>
@@ -120,13 +116,11 @@
     <!-- 7. OVERLAY DA TV CRT (CONTATOS - PERSONA 3) -->
     <div id="contatos-window" class="tv-fullscreen-overlay d-none">
         <div class="tv-layout-wrapper">
-            <!-- Container TV Tubo -->
             <div class="tv-container">
                 <video id="tv-video" src="assets/Tv_tubo_video.mp4" autoplay muted loop playsinline class="d-none"></video>
                 <canvas id="tv-canvas" class="tv-canvas"></canvas>
             </div>
 
-            <!-- SVG Linhas de Estática/Sinal Elétrico -->
             <svg class="tv-static-lines" xmlns="http://www.w3.org/2000/svg">
                 <line class="static-line" x1="0%" y1="22%" x2="100%" y2="15%" />
                 <line class="static-line" x1="0%" y1="41%" x2="100%" y2="38%" />
@@ -134,12 +128,11 @@
                 <line class="static-line" x1="0%" y1="79%" x2="100%" y2="85%" />
             </svg>
 
-            <!-- Menu Persona 3 -->
             <ul class="p3-menu">
-                <li style="--i:1;"><a href="https://github.com/yartohz" target="_blank">GitHub</a></li>
-                <li style="--i:2;"><a href="https://www.linkedin.com/in/yann-freire-soares-de-araujo-4964793aa/?isSelfProfile=true" target="_blank">LinkedIn</a></li>
+                <li style="--i:1;"><a href="https://github.com/yartohz" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li style="--i:2;"><a href="https://www.linkedin.com/in/yann-freire-soares-de-araujo-4964793aa/?isSelfProfile=true" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 <li style="--i:3;"><a href="mailto:yannfreire159@gmail.com">E-mail</a></li>
-                <li style="--i:4;"><a href="https://wa.me/5516988451129" target="_blank">WhatsApp</a></li>
+                <li style="--i:4;"><a href="https://wa.me/5516988451129" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
             </ul>
         </div>
     </div>
@@ -147,25 +140,85 @@
     <!-- 8. OVERLAY MATRIX FULLSCREEN (CERTIFICADOS) -->
     <div id="overlay-certificados" class="matrix-fullscreen d-none">
         <canvas id="matrix-full"></canvas>
-        <div class="certificados-content">
-            <h1 class="text-center mt-5" style="color: #0f0; text-shadow: 0 0 10px #0f0;">MEUS CERTIFICADOS</h1>
-            <div class="d-flex justify-content-center gap-4 mt-5 flex-wrap">
-                <!-- Certificados -->
-                <a href="assets/certificados/Certificado_REGULAMENTAÇÃO DA LGPD E ATUAÇÃO DA ANP.pdf" target="_blank" class="cert-box">
-                    Certificado LGPD e Atuação ANP
-                </a>               
-                <a href="assets/certificados/Certificado_POR DENTRO DA COMPUTAÇÃO QUÂNTIC.pdf" target="_blank" class="cert-box">
-                    Certificado Computação Quantica
-                </a>                
-                <a href="assets/certificados/Certificado_Prevenção e Reação aos Incidentes Cibernético.pdf" target="_blank" class="cert-box">
-                    Certificado Prevenção e Reação Incidentes Cibernéticos
-                </a>
-                <a href="assets/certificados/Certificado_Implantação de Serviços de Inteligência Artificial em Nuvem - Microsoft AI-900.pdf" target="_blank" class="cert-box">
-                    Certificado Microsoft Ai-900
-                </a>
+        
+        <div class="certificados-content d-flex flex-column align-items-center justify-content-between p-4 position-relative" style="z-index: 2;">
+            <h1 class="text-center my-3 matrix-title">MEUS CERTIFICADOS</h1>
+
+            <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center w-100 max-width-matrix my-auto">
+                <div class="col">
+                    <div class="card matrix-card h-100" data-pdf="assets/certificados/lgpd.pdf" data-title="LGPD e Atuação ANP">
+                        <div class="card-body d-flex flex-column justify-content-between align-items-center text-center p-3">
+                            <div class="card-icon mb-2">📜</div>
+                            <h5 class="card-title font-monospace mb-2">LGPD e Atuação ANP</h5>
+                            <p class="card-text small text-opacity-75 mb-3">Clique para visualizar o certificado em PDF</p>
+                            <button class="btn btn-sm btn-outline-success w-100 font-monospace fw-bold">VISUALIZAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card matrix-card h-100" data-pdf="assets/certificados/Certificado_computação_quantica.pdf" data-title="Computação Quântica">
+                        <div class="card-body d-flex flex-column justify-content-between align-items-center text-center p-3">
+                            <div class="card-icon mb-2">⚛️</div>
+                            <h5 class="card-title font-monospace mb-2">Computação Quântica</h5>
+                            <p class="card-text small text-opacity-75 mb-3">Clique para visualizar o certificado em PDF</p>
+                            <button class="btn btn-sm btn-outline-success w-100 font-monospace fw-bold">VISUALIZAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card matrix-card h-100" data-pdf="assets/certificados/prevencao-cibernetica.pdf" data-title="Prevenção a Incidentes Cibernéticos">
+                        <div class="card-body d-flex flex-column justify-content-between align-items-center text-center p-3">
+                            <div class="card-icon mb-2">🛡️</div>
+                            <h5 class="card-title font-monospace mb-2">Prevenção e Reação a Incidentes</h5>
+                            <p class="card-text small text-opacity-75 mb-3">Clique para visualizar o certificado em PDF</p>
+                            <button class="btn btn-sm btn-outline-success w-100 font-monospace fw-bold">VISUALIZAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card matrix-card h-100" data-pdf="assets/certificados/fullstack.pdf" data-title="Fullstack Developer">
+                        <div class="card-body d-flex flex-column justify-content-between align-items-center text-center p-3">
+                            <div class="card-icon mb-2">💻</div>
+                            <h5 class="card-title font-monospace mb-2">Fullstack Developer</h5>
+                            <p class="card-text small text-opacity-75 mb-3">Clique para visualizar o certificado em PDF</p>
+                            <button class="btn btn-sm btn-outline-success w-100 font-monospace fw-bold">VISUALIZAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <!-- Lembre-se de adicionar o nome do PDF do AI-900 na propriedade data-pdf abaixo -->
+                    <div class="card matrix-card h-100" data-pdf="assets/certificados/ai900.pdf" data-title="Microsoft AI-900">
+                        <div class="card-body d-flex flex-column justify-content-between align-items-center text-center p-3">
+                            <div class="card-icon mb-2">🤖</div>
+                            <h5 class="card-title font-monospace mb-2">Microsoft AI-900</h5>
+                            <p class="card-text small text-opacity-75 mb-3">Clique para visualizar o certificado em PDF</p>
+                            <button class="btn btn-sm btn-outline-success w-100 font-monospace fw-bold">VISUALIZAR</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="text-center mt-5">
+
+            <div class="text-center my-3">
                 <button id="btn-fechar" class="retro-btn neon-green">X FECHAR SISTEMA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. MODAL BOOTSTRAP PARA EXIBIÇÃO DO PDF -->
+    <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true" style="z-index: 6000;">
+        <div class="modal-dialog modal-xl modal-dialog-centered" style="height: 85vh;">
+            <div class="modal-content bg-black border border-2 border-success shadow-lg h-100">
+                <div class="modal-header border-bottom border-success py-2">
+                    <h5 class="modal-title text-success font-monospace" id="pdfViewerModalLabel">VISUALIZADOR_PDF.EXE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body p-0 h-100 bg-dark">
+                    <iframe id="pdfFrame" src="" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
             </div>
         </div>
     </div>

@@ -561,3 +561,45 @@ body, html {
     display: block;
     background-color: #fff;
 }
+
+/* ============== */
+/* AJUSTES CSS PÓS PRIMEIRA APRESENTAÇÃO              */
+/* ========================= */
+/* ============== */
+/* AJUSTE DE TAMANHO DA CÂMERA (50%)               */
+/* ========================= */
+.camera-hanging-container {
+    position: fixed;
+    top: -120vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5000;
+    pointer-events: none;
+    transition: top 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#vintage-camera-img {
+    width: 350px;       /* Reduzido para cerca de 50% */
+    max-width: 45vw;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0px 15px 10px rgba(0, 0, 0, 0.7));
+}
+
+/* =================================================== */
+/* ESTILOS DO SCROLLSPY (JANELA SOBRE MIM)          */
+/* =================================================== */
+#menu-sobre-spy .nav-link {
+    border-radius: 0;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+#menu-sobre-spy .nav-link.active {
+    background-color: #ffffff !important;
+    color: #3b5998 !important;
+    font-weight: bold;
+    opacity: 1;
+    box-shadow: 2px 2px 0px #000;
+}
